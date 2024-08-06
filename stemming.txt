@@ -1,0 +1,63 @@
+
+
+#stemming
+
+PUT /stemming_test
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "synonym_test": {
+          "type": "synonym",
+          "synonyms": [
+            "firm => company",
+            "love, enjoy"
+          ]
+        },
+        "stemmer_test": {
+          "type": "stemmer",
+          "name": "english"
+        }
+      },
+      "analyzer": {
+        "my_analyzer": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "synonym_test",
+            "stemmer_test"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "description": {
+        "type": "text",
+        "analyzer": "my_analyzer"
+      }
+    }
+  }
+}
+
+POST /stemming_test/_doc/1
+{
+  "description": "I love working for my firm!"
+}
+
+GET /stemming_test/_search
+{
+  "query": {
+    "match": {
+      "description": "enjoy work"
+    }
+  }  
+}
+
+GET /stemming_test/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}

@@ -1,0 +1,8 @@
+GET /auditlog/_search?format=yaml
+{
+  "query": {
+    "match": {
+      "message.businessProcess": "DATA_QC"
+    }
+  }
+}
