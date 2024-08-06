@@ -1,0 +1,113 @@
+GET /auditlog/_search
+{
+  "from": 0,
+  "size": 200,
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /auditlog/_search
+{
+  "query": {
+    "term": {
+      "message.attributes.subjectCode.keyword": {
+        "value": "ddm-002",
+        "case_insensitive": true
+      }
+    }
+  }
+}
+
+GET /auditlog/_search
+{
+  "query": {
+    "terms": {
+      "message.attributes.subjectCode.keyword": ["DDM-002", "AAA", "AAF"]
+    }
+  }
+}
+
+GET /auditlog/_search
+{
+  "query": {
+    "ids": {
+      "values": ["7SSlopABpd3lVysb2zfN", "AiS3opABpd3lVysbzGn_", "gCSnopABpd3lVysb3jxE"]
+    }
+  }
+}
+
+GET /auditlog/_search
+{
+  "query": {
+    "range": {
+      "message.dateAndTime": {
+        "format": "yyyy/MM/dd", 
+        "gte": "2024/07/12",
+        "lte": "2024/07/14"
+      }
+    }
+  }
+}
+
+# Prefix
+GET /auditlog/_search
+{
+  "query": {
+    "prefix": {
+      "message.attributes.subjectCode.keyword": {
+        "value": "TT"
+      }
+    }
+  }
+}
+
+# Wildcard
+GET /auditlog/_search
+{
+  "query": {
+    "wildcard": {
+      "message.actionByName.keyword": {
+        "value": "Igor Vo?"
+      }
+    }
+  }
+}
+
+# Pattern
+GET /auditlog/_search
+{
+  "query": {
+    "regexp": {
+      "message.businessProcess.keyword": {
+        "value": "DATA.*"
+      }
+    }
+  }
+}
+
+# Exists
+GET auditlog/_search
+{
+  "query": {
+    "exists": {
+      "field": "message.attributes.visitId"
+    }
+  }
+}
+
+#Not exists
+GET auditlog/_search
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        {
+          "exists": {
+            "field": "message.attributes.clinicalTrialId"
+          }
+        }
+      ]
+    }
+  }
+}
